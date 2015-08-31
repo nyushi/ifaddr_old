@@ -49,7 +49,7 @@ func getAddrOf(ifname string) (addrs []*address, err error) {
 	return addrs, nil
 }
 
-func getSuitableAddrs(addrs []*address, v4, v6, linklocal, loopback bool, re *regexp.Regexp) ([]*address, error) {
+func getSuitableAddrs(addrs []*address, v4, v6, linklocal, loopback bool, re *regexp.Regexp, mask *net.IPNet) ([]*address, error) {
 	ret := []*address{}
 	for _, a := range addrs {
 		if a.IsLoopback() && !loopback {
@@ -69,6 +69,11 @@ func getSuitableAddrs(addrs []*address, v4, v6, linklocal, loopback bool, re *re
 		}
 		if re != nil {
 			if !re.MatchString(a.String()) {
+				continue
+			}
+		}
+		if mask != nil {
+			if !mask.Contains(a.IP) {
 				continue
 			}
 		}
@@ -102,7 +107,7 @@ func main() {
 		}
 
 	}
-	suitables, err := getSuitableAddrs(addrs, opts.NeedIPv4, opts.NeedIPv6, opts.NeedLinkLocal, opts.NeedLoopback, r)
+	suitables, err := getSuitableAddrs(addrs, opts.NeedIPv4, opts.NeedIPv6, opts.NeedLinkLocal, opts.NeedLoopback, r, opts.IPNet)
 	if err != nil {
 		logrus.Fatal(err)
 	}
