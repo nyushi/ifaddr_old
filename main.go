@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"os"
 	"regexp"
 
 	"github.com/Sirupsen/logrus"
@@ -88,14 +89,14 @@ func getSuitableAddrs(addrs []*address, v4, v6, linklocal, loopback bool, re *re
 func main() {
 	opts, err := ParseCmdOptions()
 	if err != nil {
-		logrus.Fatal(err)
+		os.Exit(64)
 	}
 	addrs, err := getAddrOf(opts.IFName)
 	if err != nil {
 		logrus.Fatal(err)
 	}
 	var r *regexp.Regexp
-	pattern := opts.Pattern()
+	pattern := opts.Positional.Pattern
 	if pattern != "" {
 		if !opts.EnableRegexp {
 			pattern = regexp.QuoteMeta(pattern)

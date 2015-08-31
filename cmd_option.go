@@ -12,37 +12,37 @@ import (
 
 func ParseCmdOptions() (*CmdOption, error) {
 	opts := &CmdOption{}
-	args, err := flags.ParseArgs(opts, os.Args)
+	_, err := flags.ParseArgs(opts, os.Args[1:])
 	if err != nil {
 		return nil, err
 	}
 	if err := opts.prepare(); err != nil {
 		return nil, err
 	}
-	opts.Args = args
 	return opts, nil
 }
 
 type CmdOption struct {
-	Args []string
-
-	IFName           string `short:"i" long:"interface"`
-	Netmask          string `short:"m" long:"netmask"`
-	First            bool   `short:"1" long:"first"`
-	EnableRegexp     bool   `short:"E" long:"regexp"`
-	IncludeIPv6      []bool `long:"include-ipv6"`
-	ExcludeIPv6      []bool `long:"exclude-ipv6"`
-	IncludeIPv4      []bool `long:"include-ipv4"`
-	ExcludeIPv4      []bool `long:"exclude-ipv4"`
-	IncludeLinkLocal []bool `long:"include-linklocal"`
-	ExcludeLinkLocal []bool `long:"exclude-linklocal"`
-	IncludeLoopback  []bool `long:"include-loopback"`
-	ExcludeLoopback  []bool `long:"exclude-loopback"`
+	Positional struct {
+		Pattern string
+	} `positional-args:"yes"`
+	IFName           string `short:"i" long:"interface" description:"Set interface"`
+	Netmask          string `short:"m" long:"netmask"   description:"Filter address by netmask"`
+	First            bool   `short:"1" long:"first"     description:"Show only first address"`
+	EnableRegexp     bool   `short:"E" long:"regexp"    description:"Enable regexp for pattern"`
+	IncludeIPv6      []bool `long:"include-ipv6"        description:"Include IPv6 address(default)"`
+	ExcludeIPv6      []bool `long:"exclude-ipv6"        description:"Exclude IPv6 address"`
+	IncludeIPv4      []bool `long:"include-ipv4"        description:"Include IPv4 address(default)"`
+	ExcludeIPv4      []bool `long:"exclude-ipv4"        description:"Exclude IPv4 address"`
+	IncludeLinkLocal []bool `long:"include-linklocal"   description:"Include Link-Local address"`
+	ExcludeLinkLocal []bool `long:"exclude-linklocal"   description:"Exclude Link-Local address(default)"`
+	IncludeLoopback  []bool `long:"include-loopback"    description:"Include Loopback address"`
+	ExcludeLoopback  []bool `long:"exclude-loopback"    description:"Exclude Loopback address(default)"`
 
 	// shortcuts
-	All      []bool `short:"a" long:"all"`
-	OnlyIPv6 []bool `short:"6" long:"only-ipv6"`
-	OnlyIPv4 []bool `short:"4" long:"only-ipv4"`
+	All      []bool `short:"a" long:"all"       description:"Show all addresses(--include-linklocal, --include-loopback)"`
+	OnlyIPv6 []bool `short:"6" long:"only-ipv6" description:"Show only IPv6 address(--exclude-ipv4)"`
+	OnlyIPv4 []bool `short:"4" long:"only-ipv4" description:"Show only IPv6 address(--exclude-ipv6)"`
 
 	// results
 	NeedIPv6      bool
@@ -139,11 +139,4 @@ func (c *CmdOption) prepare() error {
 		c.NeedLoopback = true
 	}
 	return nil
-}
-
-func (c *CmdOption) Pattern() string {
-	if len(c.Args) > 1 {
-		return c.Args[1]
-	}
-	return ""
 }
