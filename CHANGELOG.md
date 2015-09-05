@@ -1,4 +1,4 @@
-v0.1.1 (unreleased)
+v0.1.1 (2015-09-05)
 ------------------
 
 - Support version flag
