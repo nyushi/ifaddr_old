@@ -10,6 +10,11 @@ import (
 	"github.com/Sirupsen/logrus"
 )
 
+var (
+	Version    string
+	CommitHash string
+)
+
 type address struct {
 	net.IP
 }
@@ -90,6 +95,10 @@ func main() {
 	opts, err := ParseCmdOptions()
 	if err != nil {
 		os.Exit(64)
+	}
+	if opts.VersionFlag {
+		fmt.Printf("%s(%s)", Version, CommitHash)
+		os.Exit(0)
 	}
 	addrs, err := getAddrOf(opts.IFName)
 	if err != nil {
