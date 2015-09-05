@@ -1,4 +1,7 @@
 # ifaddr
+
+[![wercker status](https://app.wercker.com/status/ba468648fe06e5fbd7f6425d4afac8ef/s "wercker status")](https://app.wercker.com/project/bykey/ba468648fe06e5fbd7f6425d4afac8ef)
+
 ifaddr is command-line tool for getting ip address that assigned local interfaces.
 
 Replaces `ip addr show eth0 | awk '/inet / {print $2}' | cut -d"/" -f1` to `ifaddr -i eth0 -1`
