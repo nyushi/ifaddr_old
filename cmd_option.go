@@ -26,6 +26,7 @@ type CmdOption struct {
 	Positional struct {
 		Pattern string
 	} `positional-args:"yes"`
+	VersionFlag      bool   `short:"v" long:"version"   description:"Show version"`
 	IFName           string `short:"i" long:"interface" description:"Set interface"`
 	Netmask          string `short:"m" long:"netmask"   description:"Filter address by netmask"`
 	First            bool   `short:"1" long:"first"     description:"Show only first address"`

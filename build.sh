@@ -3,7 +3,7 @@
 name=ifaddr
 for os in darwin linux windows; do
     for arch in amd64 386 arm; do
-        GOOS=$os GOARCH=$arch go build
+        GOOS=$os GOARCH=$arch make clean ifaddr
         if [ $os = "windows" ]; then
             zip "${name}_${os}_${arch}.zip" "${name}.exe"
         else
