@@ -97,7 +97,7 @@ func main() {
 		os.Exit(64)
 	}
 	if opts.VersionFlag {
-		fmt.Printf("%s(%s)", Version, CommitHash)
+		fmt.Printf("%s(%s)\n", Version, CommitHash)
 		os.Exit(0)
 	}
 	addrs, err := getAddrOf(opts.IFName)
